@@ -1,0 +1,5 @@
+## IDE
+.idea
+
+# Package Management
+node_modules
