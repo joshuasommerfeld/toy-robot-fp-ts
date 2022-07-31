@@ -1,7 +1,9 @@
+import { Either } from "fp-ts/Either";
+import * as E from "fp-ts/Either";
+import * as O from "fp-ts/Option";
+
 import { PositionDirection } from "../models/PositionDirection";
 import { Board } from "../models/Board";
-import { Either, left, right } from "fp-ts/Either";
-import { some } from "fp-ts/Option";
 
 export const applyNewToyRobotPosition =
     (board: Board) =>
@@ -13,14 +15,14 @@ export const applyNewToyRobotPosition =
             position.y >= board.height ||
             position.y < 0
         ) {
-            return left([
+            return E.left([
                 new Error(
                     `Position ${position.x},${position.y} is off the board.`
                 ),
             ]);
         }
-        return right({
+        return E.right({
             ...board,
-            toyRobot: some(newPositionDirection),
+            toyRobot: O.some(newPositionDirection),
         });
     };

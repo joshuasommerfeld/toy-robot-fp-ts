@@ -1,28 +1,22 @@
 import { Board } from "../models/Board";
 import * as E from "fp-ts/Either";
-import {
-    Action,
-    ActionExecutionResult,
-    ActionExecutor,
-} from "./ActionExecutor";
+import * as O from "fp-ts/Option";
+import { Option } from "fp-ts/Option";
+import { Action, ActionType, QueryActionExecutor } from "./ActionExecutor";
 import { pipe } from "fp-ts/function";
-import { hasBeenPlaced } from "../transformations/HasBeenPlaced";
+import { stringifyPositionDirection } from "../models/PositionDirection";
+import { getPlacedToyRobot } from "../transformations/GetPlacedToyRobot";
 
-const report = (
-    board: Board,
-    command: string
-): E.Either<Error[], ActionExecutionResult> =>
+const report = (board: Board, _: string): E.Either<Error[], Option<string>> =>
     pipe(
-        hasBeenPlaced(board),
-        E.chain((_) =>
-            E.right({
-                action: Action.REPORT,
-                board,
-            })
+        getPlacedToyRobot(board),
+        E.chain((toyRobot) =>
+            E.right(O.some(stringifyPositionDirection(toyRobot)))
         )
     );
 
-export const reportExecutor: ActionExecutor = {
+export const reportExecutor: QueryActionExecutor = {
     action: Action.REPORT,
-    executor: report,
+    actionType: ActionType.QUERY,
+    query: report,
 };

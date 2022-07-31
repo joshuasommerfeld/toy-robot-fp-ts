@@ -1,14 +1,13 @@
-import { Either, left, right } from "fp-ts/Either";
+import * as E from "fp-ts/Either";
+import { Either } from "fp-ts/Either";
 import * as O from "fp-ts/Option";
 import { Option } from "fp-ts/Option";
-import { Board } from "./models/Board";
-import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/function";
 
-import { placeExecutor } from "./actions/Place";
-import { Action, ActionExecutor } from "./actions/ActionExecutor";
-import { stringifyPositionDirection } from "./models/PositionDirection";
-import { reportExecutor } from "./actions/Report";
+import { Board } from "./models/Board";
+import { ActionExecutor, ActionType } from "./actions/ActionExecutor";
+
+import { actions } from "./actions";
 
 /**
  * @param line - line read from CLI
@@ -28,39 +27,37 @@ export class Controller {
     }
 
     parseAction = (line: string): Either<Error[], ActionExecutor> => {
-        switch (line.split(/\s/)[0].trim()) {
-            case Action.PLACE:
-                return right(placeExecutor);
-            case Action.REPORT:
-                return right(reportExecutor);
-            case Action.EXIT:
-                process.exit(0);
-            default:
-                return left([new Error(`"${line}" is not a valid command.`)]);
+        const command = line.split(/\s/)[0].trim();
+
+        const selectedAction = actions.find(
+            (action) => action.action === command
+        );
+
+        if (!selectedAction) {
+            return E.left([new Error(`"${line}" is not a valid command.`)]);
         }
+        return E.right(selectedAction);
+    };
+
+    boardMutation = (board: Board): Either<Error[], null> => {
+        this.board = board;
+        return E.right(null);
     };
 
     parseLine = (line: string): Either<Error[], Option<string>> =>
         pipe(
             this.parseAction(line),
-            E.chain((actionExecutor) =>
-                actionExecutor.executor(this.board, line)
-            ),
-            E.chain((result) => {
-                this.board = result.board;
-                if (
-                    result.action === Action.REPORT &&
-                    O.isSome(this.board.toyRobot)
-                ) {
-                    return right(
-                        O.some(
-                            stringifyPositionDirection(
-                                this.board.toyRobot.value
-                            )
-                        )
-                    );
+            E.chain((actionExecutor) => {
+                switch (actionExecutor.actionType) {
+                    case ActionType.QUERY:
+                        return actionExecutor.query(this.board, line);
+                    case ActionType.MUTATION:
+                        return pipe(
+                            actionExecutor.mutation(this.board, line),
+                            E.chain(this.boardMutation),
+                            E.chain((_) => E.right(O.none))
+                        );
                 }
-                return right(O.none);
             })
         );
 }

@@ -1,4 +1,5 @@
-import { Either, flatten, left, map, right } from "fp-ts/Either";
+import { Either } from "fp-ts/Either";
+import * as E from "fp-ts/Either";
 
 import { pipe } from "fp-ts/function";
 
@@ -27,13 +28,13 @@ export const stringToDirection = (
 ): Either<Error[], Direction> => {
     const maybeDirection = maybeDirectionRaw as keyof typeof Direction;
     if (Direction[maybeDirection] === undefined) {
-        return left([
+        return E.left([
             new Error(
                 `${maybeDirectionRaw} is not a Direction. Expected values are NORTH, EAST, SOUTH, WEST.`
             ),
         ]);
     }
-    return right(Direction[maybeDirection]);
+    return E.right(Direction[maybeDirection]);
 };
 
 export const stringsToPosition = (
@@ -44,13 +45,13 @@ export const stringsToPosition = (
     const maybeY = parseInt(yRaw);
 
     if (isNaN(maybeX) || isNaN(maybeY)) {
-        return left([
+        return E.left([
             new Error(
                 `Either ${xRaw} or ${yRaw} is not a number. X and Y co-ordinates must be integer numbers.`
             ),
         ]);
     }
-    return right({ x: maybeX, y: maybeY });
+    return E.right({ x: maybeX, y: maybeY });
 };
 
 export const stringsToPositionDirection = (
@@ -60,30 +61,30 @@ export const stringsToPositionDirection = (
 ): Either<Error[], PositionDirection> =>
     pipe(
         stringsToPosition(xRaw, yRaw),
-        map((position) =>
+        E.map((position) =>
             pipe(
                 stringToDirection(directionRaw),
-                map((direction) => ({
+                E.map((direction) => ({
                     position,
                     direction,
                 }))
             )
         ),
-        flatten
+        E.flatten
     );
 
 export const calculateForwardPositionDirection = (
     positionDirection: PositionDirection
-): Either<Error[], PositionDirection> => {
+): PositionDirection => {
     const { position, direction } = positionDirection;
     switch (direction) {
         case Direction.NORTH:
-            return right({ ...positionDirection, y: position.y + 1 });
+            return { direction, position: { ...position, y: position.y + 1 } };
         case Direction.SOUTH:
-            return right({ ...positionDirection, y: position.y - 1 });
+            return { direction, position: { ...position, y: position.y - 1 } };
         case Direction.EAST:
-            return right({ ...positionDirection, x: position.x + 1 });
+            return { direction, position: { ...position, x: position.x + 1 } };
         case Direction.WEST:
-            return right({ ...positionDirection, x: position.x - 1 });
+            return { direction, position: { ...position, x: position.x - 1 } };
     }
 };

@@ -2,33 +2,21 @@ import { Board } from "../models/Board";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/function";
 
-import { hasPositionDirection } from "../transformations/HasPositionDirection";
-import { calculateForwardPositionDirection } from "../models/PositionDirection";
+import { getPositionDirectionFromCommand } from "../transformations/GetPositionDirectionFromCommand";
 import { applyNewToyRobotPosition } from "../transformations/ApplyPosition";
-import {
-    Action,
-    ActionExecutionResult,
-    ActionExecutor,
-} from "./ActionExecutor";
-import { right } from "fp-ts/Either";
+import { Action, ActionType, MutationActionExecutor } from "./ActionExecutor";
 
 export const place = (
     board: Board,
     command: string
-): E.Either<Error[], ActionExecutionResult> =>
+): E.Either<Error[], Board> =>
     pipe(
-        hasPositionDirection(command),
-        E.chain(calculateForwardPositionDirection),
-        E.chain(applyNewToyRobotPosition(board)),
-        E.chain((board) =>
-            right({
-                action: Action.PLACE,
-                board,
-            })
-        )
+        getPositionDirectionFromCommand(command),
+        E.chain(applyNewToyRobotPosition(board))
     );
 
-export const placeExecutor: ActionExecutor = {
+export const placeExecutor: MutationActionExecutor = {
     action: Action.PLACE,
-    executor: place,
+    actionType: ActionType.MUTATION,
+    mutation: place,
 };

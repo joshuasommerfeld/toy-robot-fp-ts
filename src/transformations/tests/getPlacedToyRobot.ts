@@ -1,7 +1,7 @@
 import * as O from "fp-ts/Option";
 import * as E from "fp-ts/Either";
 
-import { hasBeenPlaced } from "../HasBeenPlaced";
+import { hasBeenPlaced } from "../GetPlacedToyRobot";
 import { Board } from "../../models/Board";
 import { Direction, PositionDirection } from "../../models/PositionDirection";
 

@@ -1,4 +1,5 @@
 import {
+    calculateForwardPositionDirection,
     Direction,
     PositionDirection,
     stringifyPositionDirection,
@@ -160,6 +161,69 @@ describe("PositionDirection", () => {
                     ),
                 ])
             );
+        });
+    });
+
+    describe("calculateForwardPositionDirection", () => {
+        const position = {
+            x: 1,
+            y: 2,
+        };
+        test("Calculate forward for north", () => {
+            expect(
+                calculateForwardPositionDirection({
+                    position,
+                    direction: Direction.NORTH,
+                })
+            ).toStrictEqual({
+                position: {
+                    x: 1,
+                    y: 3,
+                },
+                direction: Direction.NORTH,
+            });
+        });
+        test("Calculate forward for east", () => {
+            expect(
+                calculateForwardPositionDirection({
+                    position,
+                    direction: Direction.EAST,
+                })
+            ).toStrictEqual({
+                position: {
+                    x: 2,
+                    y: 2,
+                },
+                direction: Direction.EAST,
+            });
+        });
+        test("Calculate forward for south", () => {
+            expect(
+                calculateForwardPositionDirection({
+                    position,
+                    direction: Direction.SOUTH,
+                })
+            ).toStrictEqual({
+                position: {
+                    x: 1,
+                    y: 1,
+                },
+                direction: Direction.SOUTH,
+            });
+        });
+        test("Calculate forward for west", () => {
+            expect(
+                calculateForwardPositionDirection({
+                    position,
+                    direction: Direction.WEST,
+                })
+            ).toStrictEqual({
+                position: {
+                    x: 0,
+                    y: 2,
+                },
+                direction: Direction.WEST,
+            });
         });
     });
 });
