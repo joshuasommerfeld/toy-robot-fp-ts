@@ -3,3 +3,6 @@
 
 # Package Management
 node_modules
+
+# Tests
+coverage

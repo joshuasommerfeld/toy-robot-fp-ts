@@ -22,3 +22,16 @@ Alternatively you can run it via yarn and nvm:
     yarn start
 ```
 
+## Design Process
+
+Seperation of concernse
+1. Startup and Input - Main
+2.
+
+## Implementation Plan
+
+1. Dockerised run command
+2. Interactive command line session
+3. Command line parser
+4. Vertical slice of PLACE, including tests
+5. Implement MOVE, RIGHT, LEFT, REPORT
