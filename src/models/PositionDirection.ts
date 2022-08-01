@@ -1,6 +1,5 @@
 import { Either } from "fp-ts/Either";
 import * as E from "fp-ts/Either";
-
 import { pipe } from "fp-ts/function";
 
 export enum Direction {
@@ -10,7 +9,12 @@ export enum Direction {
     WEST,
 }
 
-interface Position {
+export enum TurnDirection {
+    LEFT = -1,
+    RIGHT = 1,
+}
+
+export interface Position {
     x: number;
     y: number;
 }
@@ -88,3 +92,26 @@ export const calculateForwardPositionDirection = (
             return { direction, position: { ...position, x: position.x - 1 } };
     }
 };
+
+export const rotatePositionDirection =
+    (turnDirection: TurnDirection) =>
+    (positionDirection: PositionDirection): PositionDirection => {
+        const { position, direction } = positionDirection;
+        const directionIndex = direction + turnDirection;
+        if (directionIndex < 0) {
+            return {
+                position,
+                direction: Direction.WEST,
+            };
+        }
+        if (directionIndex > 3) {
+            return {
+                position,
+                direction: Direction.NORTH,
+            };
+        }
+        return {
+            position,
+            direction: directionIndex,
+        };
+    };

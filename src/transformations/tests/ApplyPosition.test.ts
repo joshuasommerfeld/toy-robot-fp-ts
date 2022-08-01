@@ -1,7 +1,8 @@
-import { applyNewToyRobotPosition } from "../ApplyPosition";
-import { Board } from "../../models/Board";
 import * as E from "fp-ts/Either";
 import * as O from "fp-ts/Option";
+
+import { applyNewToyRobotPosition } from "../ApplyPosition";
+import { Board } from "../../models/Board";
 import { Direction, PositionDirection } from "../../models/PositionDirection";
 
 describe("applyNewToyRobotPosition", () => {

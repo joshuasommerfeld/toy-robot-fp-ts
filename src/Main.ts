@@ -1,11 +1,8 @@
 import readline from "readline";
-import { text } from "./Text";
 import { Controller } from "./Controller";
 import { map, mapLeft } from "fp-ts/Either";
 import { pipe } from "fp-ts/function";
 import { isSome } from "fp-ts/Option";
-
-const { help, startup } = text;
 
 const commandLineReader = readline.createInterface({
     input: process.stdin,
@@ -14,8 +11,16 @@ const commandLineReader = readline.createInterface({
 
 const controller = new Controller(5);
 
-console.log(startup);
-console.log(help);
+console.log("Toy robot ready for input");
+console.log(`
+Valid commands are:
+  PLACE X,Y,F - Place the robot
+  MOVE - Move the robot forward
+  LEFT - Rotate the robot to the left
+  RIGHT - Rotate the robot to the right
+  REPORT - Report the co-ordinates and direction of the robot
+  EXIT - exit
+`);
 
 commandLineReader.prompt(true);
 commandLineReader.on("line", (line: string) =>

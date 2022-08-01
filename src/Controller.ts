@@ -39,6 +39,7 @@ export class Controller {
         return E.right(selectedAction);
     };
 
+    /* Board mutation side effect */
     boardMutation = (board: Board): Either<Error[], null> => {
         this.board = board;
         return E.right(null);
@@ -57,6 +58,8 @@ export class Controller {
                             E.chain(this.boardMutation),
                             E.chain((_) => E.right(O.none))
                         );
+                    case ActionType.TERMINATION:
+                        return actionExecutor.systemProcess();
                 }
             })
         );

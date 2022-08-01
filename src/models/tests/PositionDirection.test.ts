@@ -1,13 +1,16 @@
+import * as E from "fp-ts/Either";
 import {
     calculateForwardPositionDirection,
     Direction,
+    Position,
     PositionDirection,
+    rotatePositionDirection,
     stringifyPositionDirection,
     stringsToPosition,
     stringsToPositionDirection,
     stringToDirection,
+    TurnDirection,
 } from "../PositionDirection";
-import * as E from "fp-ts/Either";
 
 describe("PositionDirection", () => {
     describe("stringifyPositionDirection", () => {
@@ -223,6 +226,108 @@ describe("PositionDirection", () => {
                     y: 2,
                 },
                 direction: Direction.WEST,
+            });
+        });
+    });
+
+    describe("rotatePositionDirection", () => {
+        const position: Position = {
+            x: 1,
+            y: 2,
+        };
+        describe("turn left", () => {
+            const turnLeft = rotatePositionDirection(TurnDirection.LEFT);
+            test("NORTH to WEST", () => {
+                expect(
+                    turnLeft({
+                        position,
+                        direction: Direction.NORTH,
+                    })
+                ).toStrictEqual({
+                    position,
+                    direction: Direction.WEST,
+                });
+            });
+            test("WEST to SOUTH", () => {
+                expect(
+                    turnLeft({
+                        position,
+                        direction: Direction.WEST,
+                    })
+                ).toStrictEqual({
+                    position,
+                    direction: Direction.SOUTH,
+                });
+            });
+            test("SOUTH to EAST", () => {
+                expect(
+                    turnLeft({
+                        position,
+                        direction: Direction.SOUTH,
+                    })
+                ).toStrictEqual({
+                    position,
+                    direction: Direction.EAST,
+                });
+            });
+            test("EAST to NORTH", () => {
+                expect(
+                    turnLeft({
+                        position,
+                        direction: Direction.EAST,
+                    })
+                ).toStrictEqual({
+                    position,
+                    direction: Direction.NORTH,
+                });
+            });
+        });
+
+        describe("turn right", () => {
+            const turnLeft = rotatePositionDirection(TurnDirection.RIGHT);
+            test("NORTH to EAST", () => {
+                expect(
+                    turnLeft({
+                        position,
+                        direction: Direction.NORTH,
+                    })
+                ).toStrictEqual({
+                    position,
+                    direction: Direction.EAST,
+                });
+            });
+            test("EAST to SOUTH", () => {
+                expect(
+                    turnLeft({
+                        position,
+                        direction: Direction.EAST,
+                    })
+                ).toStrictEqual({
+                    position,
+                    direction: Direction.SOUTH,
+                });
+            });
+            test("SOUTH to WEST", () => {
+                expect(
+                    turnLeft({
+                        position,
+                        direction: Direction.SOUTH,
+                    })
+                ).toStrictEqual({
+                    position,
+                    direction: Direction.WEST,
+                });
+            });
+            test("WEST to NORTH", () => {
+                expect(
+                    turnLeft({
+                        position,
+                        direction: Direction.WEST,
+                    })
+                ).toStrictEqual({
+                    position,
+                    direction: Direction.NORTH,
+                });
             });
         });
     });

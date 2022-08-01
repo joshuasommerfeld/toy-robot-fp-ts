@@ -1,7 +1,7 @@
 import * as O from "fp-ts/Option";
 import * as E from "fp-ts/Either";
 
-import { hasBeenPlaced } from "../GetPlacedToyRobot";
+import { getPlacedToyRobot } from "../GetPlacedToyRobot";
 import { Board } from "../../models/Board";
 import { Direction, PositionDirection } from "../../models/PositionDirection";
 
@@ -20,16 +20,16 @@ describe("hasBeenPlaced", () => {
         direction: Direction.EAST,
     };
     test("toy robot is some returns right", () => {
-        expect(hasBeenPlaced(board)).toStrictEqual(
+        expect(getPlacedToyRobot(board)).toStrictEqual(
             E.left([new Error("Robot has not been placed")])
         );
     });
     test("toy robot is none returns left", () => {
         expect(
-            hasBeenPlaced({
+            getPlacedToyRobot({
                 ...board,
                 toyRobot: O.some(toyRobot),
             })
-        ).toStrictEqual(E.right(null));
+        ).toStrictEqual(E.right(toyRobot));
     });
 });

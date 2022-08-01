@@ -1,9 +1,10 @@
-import { Board } from "../models/Board";
 import * as E from "fp-ts/Either";
 import * as O from "fp-ts/Option";
 import { Option } from "fp-ts/Option";
-import { Action, ActionType, QueryActionExecutor } from "./ActionExecutor";
 import { pipe } from "fp-ts/function";
+
+import { Action, ActionType, QueryActionExecutor } from "./ActionExecutor";
+import { Board } from "../models/Board";
 import { stringifyPositionDirection } from "../models/PositionDirection";
 import { getPlacedToyRobot } from "../transformations/GetPlacedToyRobot";
 

@@ -6,6 +6,7 @@ const config: Config.InitialOptions = {
     testEnvironment: "node",
     collectCoverage: true,
     coverageDirectory: "coverage",
+    collectCoverageFrom: ["<rootDir>/src/**/*.ts"],
     testPathIgnorePatterns: ["/node_modules/"],
 };
 

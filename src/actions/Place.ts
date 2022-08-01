@@ -1,7 +1,7 @@
-import { Board } from "../models/Board";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/function";
 
+import { Board } from "../models/Board";
 import { getPositionDirectionFromCommand } from "../transformations/GetPositionDirectionFromCommand";
 import { applyNewToyRobotPosition } from "../transformations/ApplyPosition";
 import { Action, ActionType, MutationActionExecutor } from "./ActionExecutor";

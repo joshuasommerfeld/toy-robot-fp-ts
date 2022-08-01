@@ -1,10 +1,12 @@
-import { Board } from "../models/Board";
 import { Either } from "fp-ts/Either";
 import { Option } from "fp-ts/Option";
+
+import { Board } from "../models/Board";
 
 export enum ActionType {
     QUERY,
     MUTATION,
+    TERMINATION,
 }
 
 export enum Action {
@@ -47,4 +49,13 @@ export interface MutationActionExecutor extends IActionExecutor {
     mutation: Mutation;
 }
 
-export type ActionExecutor = QueryActionExecutor | MutationActionExecutor;
+export interface TerminationActionExecutor extends IActionExecutor {
+    action: Action;
+    actionType: ActionType.TERMINATION;
+    systemProcess: () => Either<Error[], Option<string>>;
+}
+
+export type ActionExecutor =
+    | QueryActionExecutor
+    | MutationActionExecutor
+    | TerminationActionExecutor;
