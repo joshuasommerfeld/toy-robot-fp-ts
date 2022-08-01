@@ -7,7 +7,7 @@ import { pipe } from "fp-ts/function";
 import { Board } from "./models/Board";
 import { ActionExecutor, ActionType } from "./actions/ActionExecutor";
 
-import { actions } from "./actions";
+import { parseAction as parseActionRaw } from "./actions";
 
 /**
  * @param line - line read from CLI
@@ -17,30 +17,19 @@ import { actions } from "./actions";
 
 export class Controller {
     board: Board;
+    parseAction: (line: string) => Either<Error[], ActionExecutor>;
 
-    constructor(size: number) {
+    constructor(size: number, parseAction = parseActionRaw) {
         this.board = {
             width: size,
             height: size,
             toyRobot: O.none,
         };
+        this.parseAction = parseAction;
     }
 
-    parseAction = (line: string): Either<Error[], ActionExecutor> => {
-        const command = line.split(/\s/)[0].trim();
-
-        const selectedAction = actions.find(
-            (action) => action.action === command
-        );
-
-        if (!selectedAction) {
-            return E.left([new Error(`"${line}" is not a valid command.`)]);
-        }
-        return E.right(selectedAction);
-    };
-
     /* Board mutation side effect */
-    boardMutation = (board: Board): Either<Error[], null> => {
+    protected boardMutation = (board: Board): Either<Error[], null> => {
         this.board = board;
         return E.right(null);
     };

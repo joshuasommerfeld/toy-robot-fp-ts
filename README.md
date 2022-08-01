@@ -4,7 +4,7 @@
 
 Toy robot challenge, build to the specifications in `20_coding_test.md`.
 
-This project utilises Typescript and fp-ts for it's functional generic monads.
+This project utilises Typescript and [fp-ts](https://github.com/gcanti/fp-ts) for it's functional generic monads.
 
 ## Getting Started
 
@@ -24,9 +24,12 @@ Alternatively you can run it via yarn and nvm:
 
 ## Design Process
 
-Seperation of concernse
+Separation of Concerns
 1. Startup and Input - Main
-2.
+2. Message BUS and storage - Controller
+3. Action parsing and executions - actions
+4. Data transformations / pure functions - transformations
+
 
 ## Implementation Plan
 

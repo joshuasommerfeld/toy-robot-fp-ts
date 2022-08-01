@@ -1,3 +1,7 @@
+import { Either } from "fp-ts/Either";
+import * as E from "fp-ts/Either";
+
+import { ActionExecutor } from "./ActionExecutor";
 import { placeExecutor } from "./Place";
 import { reportExecutor } from "./Report";
 import { moveExecutor } from "./Move";
@@ -12,3 +16,14 @@ export const actions = [
     reportExecutor,
     exitExecutor,
 ];
+
+export const parseAction = (line: string): Either<Error[], ActionExecutor> => {
+    const command = line.split(/\s/)[0].trim();
+
+    const selectedAction = actions.find((action) => action.action === command);
+
+    if (!selectedAction) {
+        return E.left([new Error(`"${line}" is not a valid command.`)]);
+    }
+    return E.right(selectedAction);
+};
