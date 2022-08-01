@@ -1,8 +1,9 @@
-# Certsy Toy Robot
+# Toy Robot with FP-TS
 
 **Authored by Josh Sommerfeld**
 
 Toy robot challenge, build to the specifications in `20_coding_test.md`.
+This is an interactive CLI, designed in reference to the spec in [20_coding_test](20_coding_test.md)
 
 This project utilises Typescript and [fp-ts](https://github.com/gcanti/fp-ts).
 
