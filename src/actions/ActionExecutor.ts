@@ -18,11 +18,6 @@ export enum Action {
     EXIT = "EXIT",
 }
 
-export interface ActionExecutionResult {
-    action: Action;
-    board: Board;
-}
-
 export type Mutation = (
     board: Board,
     command: string
@@ -33,7 +28,7 @@ export type Query = (
     command: string
 ) => Either<Error[], Option<string>>;
 
-export interface IActionExecutor {
+interface IActionExecutor {
     action: Action;
 }
 

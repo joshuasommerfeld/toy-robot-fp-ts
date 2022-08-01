@@ -1,7 +1,7 @@
 {
-  "name": "certsy-toy-robot",
+  "name": "toy-robot-fp-ts",
   "version": "1.0.0",
-  "description": "Certsy coding challenge - typescript",
+  "description": "coding challenge - Toy Robot - typescript with fp-ts",
   "main": "src/Main.ts",
   "author": "Josh Sommerfeld <joshua.sommerfeld91@gmail.com>",
   "license": "MIT",

@@ -9,12 +9,6 @@ import { ActionExecutor, ActionType } from "./actions/ActionExecutor";
 
 import { parseAction as parseActionRaw } from "./actions";
 
-/**
- * @param line - line read from CLI
- * @returns Either an array of errors, or a boolean.
- *    If the boolean is true, it exits the program, otherwise it continues to prompt
- */
-
 export class Controller {
     board: Board;
     parseAction: (line: string) => Either<Error[], ActionExecutor>;
@@ -28,12 +22,19 @@ export class Controller {
         this.parseAction = parseAction;
     }
 
-    /* Board mutation side effect */
+    /**
+     * @param board - A new board to overwrite our previous board state
+     * @returns Either an array of errors, or null denoting the side effect was successful
+     */
     protected boardMutation = (board: Board): Either<Error[], null> => {
         this.board = board;
         return E.right(null);
     };
 
+    /**
+     * @param line - line read from CLI
+     * @returns Either an array of errors, or maybe a string intended to be output
+     */
     parseLine = (line: string): Either<Error[], Option<string>> =>
         pipe(
             this.parseAction(line),
@@ -45,7 +46,7 @@ export class Controller {
                         return pipe(
                             actionExecutor.mutation(this.board, line),
                             E.chain(this.boardMutation),
-                            E.chain((_) => E.right(O.none))
+                            E.chain((_) => E.right(O.none)) // mutations provide no user output
                         );
                     case ActionType.TERMINATION:
                         return actionExecutor.systemProcess();
