@@ -5,6 +5,11 @@ import {
     stringsToPositionDirection,
 } from "../models/PositionDirection";
 
+/**
+ * @description returns a correctly formatted string into an instance of PositionDirection
+ * @param command - Full command string, including the prefixed command (usually "PLACE")
+ * @returns Either an array of errors, or a PositionDirection object if the input is valid
+ */
 export const getPositionDirectionFromCommand = (
     command: string
 ): Either<Error[], PositionDirection> => {

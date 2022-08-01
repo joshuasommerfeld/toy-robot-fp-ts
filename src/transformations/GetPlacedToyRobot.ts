@@ -4,6 +4,10 @@ import * as E from "fp-ts/Either";
 import { isSome } from "fp-ts/Option";
 import { PositionDirection } from "../models/PositionDirection";
 
+/**
+ * @param board - The current board state to mutate
+ * @returns Either an array of errors, or the robot that's on the board
+ */
 export const getPlacedToyRobot = (
     board: Board
 ): Either<Error[], PositionDirection> => {

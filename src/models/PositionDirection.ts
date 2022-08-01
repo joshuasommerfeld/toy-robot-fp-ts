@@ -24,9 +24,23 @@ export interface PositionDirection {
     direction: Direction;
 }
 
-export const stringifyPositionDirection = (pd: PositionDirection): string =>
-    `${pd.position.x},${pd.position.y},${Direction[pd.direction]}`;
+/**
+ * @description returns a formatted string of a PositionDirection in format `x,y,DIRECTION`
+ * @param positionDirection - A PositionDirect object
+ * @returns a correctly formatted string
+ */
+export const stringifyPositionDirection = (
+    positionDirection: PositionDirection
+): string => {
+    const { position, direction } = positionDirection;
+    return `${position.x},${position.y},${Direction[direction]}`;
+};
 
+/**
+ * @description transforms a string into a Direction enum
+ * @param maybeDirectionRaw - A string that represents a potential Direction
+ * @returns a list of errors, or a Direction enum
+ */
 export const stringToDirection = (
     maybeDirectionRaw: string
 ): Either<Error[], Direction> => {
@@ -41,6 +55,12 @@ export const stringToDirection = (
     return E.right(Direction[maybeDirection]);
 };
 
+/**
+ * @description takes 2 strings ("x" and "y") and returns an instance of Position
+ * @param xRaw - The string representation of a "x" co-ordinate
+ * @param yRaw - The string representation of a "y" co-ordinate
+ * @returns a list of errors, or an instance of Position
+ */
 export const stringsToPosition = (
     xRaw: string,
     yRaw: string
@@ -58,6 +78,14 @@ export const stringsToPosition = (
     return E.right({ x: maybeX, y: maybeY });
 };
 
+/**
+ * @description takes 3 strings ("x", "y" and direction) and returns an instance of PositionDirection.
+ * **NOTE** I would like to improve this so stringToDirection is called in parallel with stringsToPosition, but I've run out of time.
+ * @param xRaw - The string representation of a "x" co-ordinate
+ * @param yRaw - The string representation of a "y" co-ordinate
+ * @param directionRaw - The string representation of a Direction
+ * @returns a list of errors, or an instance of PositionDirection
+ */
 export const stringsToPositionDirection = (
     xRaw: string,
     yRaw: string,
@@ -77,6 +105,11 @@ export const stringsToPositionDirection = (
         E.flatten
     );
 
+/**
+ * @description takes a PositionDirection and returns a new positionDirection one space forward
+ * @param positionDirection - The current PositionDirection
+ * @returns a new PositionDirection one space in front of the supplied one.
+ */
 export const calculateForwardPositionDirection = (
     positionDirection: PositionDirection
 ): PositionDirection => {
@@ -93,6 +126,12 @@ export const calculateForwardPositionDirection = (
     }
 };
 
+/**
+ * @description takes a PositionDirection and returns a new positionDirection rotated left or right
+ * @param turnDirection - TurnDirection enum, to determine whether to rotate left or right
+ * @param positionDirection - The current PositionDirection
+ * @returns a new PositionDirection, rotated in the supplied direction
+ */
 export const rotatePositionDirection =
     (turnDirection: TurnDirection) =>
     (positionDirection: PositionDirection): PositionDirection => {
